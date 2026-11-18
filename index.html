@@ -129,7 +129,6 @@ main .wrap { padding-block: 6px calc(var(--bar-h) + 28px); }
   .search { flex-basis: 100%; }
   .tones { width: 100%; justify-content: space-between; }
   .info .meta { display: none; }
-  #addBtn { display: none; }
   .grid { grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); }
   .tile { font-size: 28px; }
 }
@@ -145,7 +144,7 @@ main .wrap { padding-block: 6px calc(var(--bar-h) + 28px); }
   <div class="wrap">
     <div class="brand">
       <h1>Emoji Finder <span aria-hidden="true">🔎</span></h1>
-      <p class="keys"><span>Type to search</span><span><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> move</span><span><kbd>↵</kbd> copy</span><span><kbd>⇧</kbd><kbd>↵</kbd> collect several</span><span><kbd>esc</kbd> clear</span></p>
+      <p class="keys"><span>Type to search</span><span><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> move</span><span><kbd>↵</kbd> copy</span><span><kbd>esc</kbd> clear</span></p>
     </div>
     <div class="searchrow">
       <label class="search" for="q">
@@ -172,10 +171,9 @@ main .wrap { padding-block: 6px calc(var(--bar-h) + 28px); }
     <div class="detail">
       <div class="big" id="big" aria-hidden="true">👆</div>
       <div class="info" id="info">
-        <div class="hintline">Click any emoji to copy it, then paste with <kbd>⌘</kbd><kbd>V</kbd>. Shift-click to collect several.</div>
+        <div class="hintline">Click any emoji to copy it, then paste with <kbd>⌘</kbd><kbd>V</kbd>.</div>
       </div>
       <div class="actions">
-        <button class="btn" id="addBtn" type="button" disabled>Collect</button>
         <button class="btn primary" id="copyBtn" type="button" disabled>Copy</button>
       </div>
     </div>
@@ -309,10 +307,9 @@ let shown = null;
 function showDetail(it) {
   shown = it;
   $("copyBtn").disabled = !it;
-  $("addBtn").disabled = !it;
   if (!it) {
     $("big").textContent = "👆";
-    $("info").innerHTML = `<div class="hintline">Click any emoji to copy it, then paste with <kbd>⌘</kbd><kbd>V</kbd>. Shift-click to collect several.</div>`;
+    $("info").innerHTML = `<div class="hintline">Click any emoji to copy it, then paste with <kbd>⌘</kbd><kbd>V</kbd>.</div>`;
     return;
   }
   const g = glyph(it);
@@ -416,7 +413,6 @@ $("copyBtn").addEventListener("click", () => {
   if (!shown) return;
   copyItem(shown, tiles[selIdx]);
 });
-$("addBtn").addEventListener("click", () => { if (shown) collect(shown); });
 $("trayCopy").addEventListener("click", () => {
   const n = $("trayCopy").textContent.match(/\d+/)?.[0] ?? "";
   copyText(tray).then(ok => toast(ok ? tray.slice(0, 16) : "", ok ? `Copied ${n} emoji` : "Your browser blocked copying. Select them above and press ⌘C."));
